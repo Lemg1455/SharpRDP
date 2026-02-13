@@ -2,7 +2,7 @@ name: Build SharpRDP
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -15,11 +15,14 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Restore NuGet packages
+        run: nuget restore SharpRDP.sln
+
       - name: Build project
-        run: msbuild SharpRDP/SharpRDP.csproj /p:Configuration=Release /p:Platform=x64
+        run: msbuild SharpRDP.sln /p:Configuration=Release /p:Platform=x64
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: SharpRDP-Release
-          path: SharpRDP/bin/Release/
+          path: '**/bin/Release/**/*'
