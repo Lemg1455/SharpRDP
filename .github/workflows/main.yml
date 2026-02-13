@@ -15,7 +15,7 @@ jobs:
       - name: Install .NET Framework 4.5 Developer Pack
         # 手动下载并安装4.5开发包（微软官方源）
         run: |
-          Invoke-WebRequest -Uri "https://download.microsoft.com/download/B/A/4/BA4A7E71-2906-4B2D-A0E1-80CF16844F5F/dotNetFx45_Full_setup.exe" -OutFile "NDP451-DevPack.exe"
+          Invoke-WebRequest -Uri "https://download.microsoft.com/download/9/6/0/96075294-6820-4F01-924A-474E0023E407/NDP451-KB2861696-x86-x64-DevPack.exe" -OutFile "NDP451-DevPack.exe"
           Start-Process -FilePath .\NDP451-DevPack.exe -ArgumentList "/quiet /norestart" -Wait
 
       - name: Setup MSBuild
