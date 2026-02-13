@@ -3,7 +3,7 @@ name: Build SharpRDP
 on:
   push:
     branches: [ master ]
-  workflow_dispatch:
+  workflow_dispatch:  # 启用手动触发
 
 jobs:
   build:
@@ -18,8 +18,9 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore SharpRDP/SharpRDP.sln
 
-      - name: Build project
-        run: msbuild SharpRDP/SharpRDP.sln /p:Configuration=Release /p:Platform=x64
+      - name: Build project (使用正确的平台配置)
+        # 关键修改：Platform 改为 "Any CPU"，注意空格和引号
+        run: msbuild SharpRDP/SharpRDP.sln /p:Configuration=Release /p:Platform="Any CPU"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
