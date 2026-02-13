@@ -3,7 +3,7 @@ name: Build SharpRDP
 on:
   push:
     branches: [ master ]
-  workflow_dispatch:
+  workflow_dispatch:  # 手动触发开关
 
 jobs:
   build:
@@ -12,22 +12,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install .NET Framework 4.5 Developer Pack
-        # 手动下载并安装4.5开发包（微软官方源）
+      - name: 安装 .NET Framework 4.5 开发包
+        # 自动下载并安装 4.5 Targeting Pack，解决引用缺失问题
         run: |
-          Invoke-WebRequest -Uri "https://download.microsoft.com/download/9/6/0/96075294-6820-4F01-924A-474E0023E407/NDP451-KB2861696-x86-x64-DevPack.exe" -OutFile "NDP451-DevPack.exe"
-          Start-Process -FilePath .\NDP451-DevPack.exe -ArgumentList "/quiet /norestart" -Wait
+          Invoke-WebRequest -Uri "https://download.microsoft.com/download/9/6/0/96075294-6820-4F01-924A-474E0023E407/NDP451-KB2861696-x86-x64-DevPack.exe" -OutFile "dotnetfx45_devpack.exe"
+          Start-Process -FilePath .\dotnetfx45_devpack.exe -ArgumentList "/q /norestart" -Wait
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Restore NuGet packages
+      - name: 还原 NuGet 依赖
         run: nuget restore SharpRDP/SharpRDP.sln
 
-      - name: Build project
+      - name: 编译项目（使用正确的平台配置）
         run: msbuild SharpRDP/SharpRDP.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-      - name: Upload build artifacts
+      - name: 上传编译产物
         uses: actions/upload-artifact@v4
         with:
           name: SharpRDP-Release
