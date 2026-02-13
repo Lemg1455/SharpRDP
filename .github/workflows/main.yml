@@ -3,25 +3,31 @@ name: Build SharpRDP
 on:
   push:
     branches: [ master ]
-  workflow_dispatch:  # 支持手动触发
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: 拉取代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 自动配置MSBuild（无需手动下载）
-        uses: microsoft/setup-msbuild@v2  # 官方动作，自动适配合法依赖源
+      - name: Install .NET Framework 4.5 Developer Pack
+        # 手动下载并安装4.5开发包（微软官方源）
+        run: |
+          Invoke-WebRequest -Uri "https://download.microsoft.com/download/B/A/4/BA4A7E71-2906-4B2D-A0E1-80CF16844F5F/dotNetFx45_Full_setup.exe" -OutFile "NDP451-DevPack.exe"
+          Start-Process -FilePath .\NDP451-DevPack.exe -ArgumentList "/quiet /norestart" -Wait
 
-      - name: 还原NuGet包
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
         run: nuget restore SharpRDP/SharpRDP.sln
 
-      - name: 编译项目（使用正确的平台配置）
+      - name: Build project
         run: msbuild SharpRDP/SharpRDP.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-      - name: 上传编译产物
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: SharpRDP-Release
