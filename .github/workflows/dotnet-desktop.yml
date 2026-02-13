@@ -56,8 +56,8 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: SharpRDP/SharpRDP.sln                         # 替换为你的解决方案名称
-      Test_Project_Path: SharpRDP\SharpRDP.csproj         # 替换为你的测试项目路径（如果没有测试项目，可删除相关步骤）
+      Solution_Name: SharpRDP\SharpRDP.sln                         # 替换为你的解决方案名称
+      # Test_Project_Path: SharpRDP\SharpRDP.csproj         # 替换为你的测试项目路径（如果没有测试项目，可删除相关步骤）
       # Wap_Project_Directory: your-wap-project-directory-name  # 如果你没有Wap项目，可以注释或删除这行
       # Wap_Project_Path: your-wap-project-path                # 如果你没有Wap项目，可以注释或删除这行
 
